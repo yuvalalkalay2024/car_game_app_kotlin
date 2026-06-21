@@ -1,15 +1,21 @@
 package com.example.obstacle_game // שנה לשם ה-package האמיתי שלך
 
-class GameManager(private val rows: Int = 6, private val cols: Int = 3) {
+class GameManager(private val rows: Int = 16, private val cols: Int = 5) {
 
     var lives: Int = 3
         private set // קריאה חופשית מבחוץ, שינוי רק מתוך המחלקה
 
-    var carLane: Int = 1 // 0 = שמאל, 1 = אמצע, 2 = ימין
+    var carLane: Int = 2 // 0 = שמאל, 1 = אמצע, 2 = ימין
+        private set
+
+    var coinsCollected: Int = 0
         private set
 
     // מטריצה בוליאנית: true מייצג מכשול, false מייצג שטח ריק
-    val obstacleMatrix: Array<BooleanArray> = Array(rows) { BooleanArray(cols) { false } }
+    val obstacleMatrix: Array<IntArray> = Array(rows) { IntArray(cols) { 0 } }
+
+    var distanceTraveled: Int = 0
+        private set
 
     fun moveCarLeft() {
         if (carLane > 0) carLane--
@@ -20,6 +26,7 @@ class GameManager(private val rows: Int = 6, private val cols: Int = 3) {
     }
 
     fun advanceObstacles() {
+        distanceTraveled += 1
         // 1. קידום המכשולים הקיימים למטה
         for (i in rows - 1 downTo 1) {
             for (j in 0 until cols) {
@@ -29,33 +36,43 @@ class GameManager(private val rows: Int = 6, private val cols: Int = 3) {
 
         // 2. ניקוי השורה העליונה
         for (j in 0 until cols) {
-            obstacleMatrix[0][j] = false
+            obstacleMatrix[0][j] = 0
         }
 
         // 3. בדיקה אם השורה שמתחתיה (שורה 1) מכילה מכשול
         var isRow1Empty = true
         for (j in 0 until cols) {
-            if (obstacleMatrix[1][j]) {
+            if (obstacleMatrix[1][j] > 0) {
                 isRow1Empty = false
                 break
             }
         }
 
         // 4. ייצור מכשול חדש: רק אם השורה הקודמת ריקה (כדי ליצור מרווח נשימה), ובסיכוי של 50%
-        if (isRow1Empty && Math.random() > 0.5) {
+        if (isRow1Empty) {
+            val rand = Math.random()
             val randomCol = (0 until cols).random()
-            obstacleMatrix[0][randomCol] = true
+            if (rand > 0.6) {
+                obstacleMatrix[0][randomCol] = 1 // ייצור מכשול
+            } else if (rand > 0.4) {
+                obstacleMatrix[0][randomCol] = 2 // ייצור מטבע
+            }
         }
     }
 
-    fun checkCollision(): Boolean {
-        // התנגשות קורית אם יש מכשול בשורה התחתונה ביותר באותו נתיב של המכונית
-        if (obstacleMatrix[rows - 1][carLane]) {
+    fun checkCollision(): Int {
+        val currentItem = obstacleMatrix[rows - 1][carLane]
+
+        if (currentItem == 1) { // התנגשות במכשול
             lives--
-            obstacleMatrix[rows - 1][carLane] = false // מעלימים את המכשול שלא ניפסל שוב ושוב
-            return true
+            obstacleMatrix[rows - 1][carLane] = 0
+            return 1
+        } else if (currentItem == 2) { // איסוף מטבע
+            coinsCollected++
+            obstacleMatrix[rows - 1][carLane] = 0
+            return 2
         }
-        return false
+        return 0
     }
 
     fun isGameOver(): Boolean {
@@ -63,11 +80,12 @@ class GameManager(private val rows: Int = 6, private val cols: Int = 3) {
     }
 
     fun resetGame() {
+        distanceTraveled = 0
         lives = 3
-        carLane = 1
+        carLane = 2
         for (i in 0 until rows) {
             for (j in 0 until cols) {
-                obstacleMatrix[i][j] = false
+                obstacleMatrix[i][j] = 0
             }
         }
     }

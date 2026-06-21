@@ -1,6 +1,7 @@
-package com.example.obstacle_game // שנה לשם ה-package האמיתי שלך
+package com.example.car_game // שנה לשם ה-package האמיתי שלך
 
 import android.content.Context
+import android.media.MediaPlayer // ייבוא מחלקת המדיה שנוסף
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -28,6 +29,18 @@ class SignalManager(private val context: Context) {
         } else {
             @Suppress("DEPRECATION")
             v.vibrate(500)
+        }
+    }
+
+    // הפונקציה החדשה שמנגנת את הסאונד
+    fun playSound() {
+        // R.raw.crash - ודא שיש לך קובץ בשם crash.mp3 בתיקיית res/raw
+        val mediaPlayer = MediaPlayer.create(context, R.raw.crash)
+        mediaPlayer.start()
+
+        // משחרר את הזיכרון כשהסאונד מסיים להתנגן
+        mediaPlayer.setOnCompletionListener {
+            it.release()
         }
     }
 }

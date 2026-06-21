@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
+    android:background="#333333"
+    android:layoutDirection="ltr">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CAR GAME"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="40dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Controls:"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <RadioGroup
+        android:id="@+id/rg_controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="32dp">
+        <RadioButton
+            android:id="@+id/rb_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buttons"
+            android:textColor="#FFFFFF"
+            android:buttonTint="#4CAF50"
+            android:checked="true"/>
+        <RadioButton
+            android:id="@+id/rb_sensor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sensors (Tilt)"
+            android:textColor="#FFFFFF"
+            android:buttonTint="#4CAF50"
+            android:layout_marginStart="24dp"/>
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Speed:"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <RadioGroup
+        android:id="@+id/rg_speed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="64dp">
+        <RadioButton
+            android:id="@+id/rb_slow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Slow"
+            android:textColor="#FFFFFF"
+            android:buttonTint="#4CAF50"
+            android:checked="true"/>
+        <RadioButton
+            android:id="@+id/rb_fast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fast"
+            android:textColor="#FFFFFF"
+            android:buttonTint="#4CAF50"
+            android:layout_marginStart="24dp"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btn_start_game"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="START GAME"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:backgroundTint="#4CAF50"/>
+
+    <Button
+        android:id="@+id/btn_high_scores"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:text="HIGH SCORES"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:backgroundTint="#2196F3"/>
+
+</LinearLayout>
