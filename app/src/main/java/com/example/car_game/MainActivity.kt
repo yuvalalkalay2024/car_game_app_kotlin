@@ -107,20 +107,37 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    // --- אירועי חיישן התאוצה (מעודכן עם שליטת מהירות) ---
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null && isSensorMode) {
             val currentTime = System.currentTimeMillis()
+
+            // 1. שליטה ימינה/שמאלה (ציר X) - הקוד הקיים שלך
             if (currentTime - lastSensorMoveTime > 300) {
                 val x = event.values[0]
-                if (x > 2.5) {
+                if (x > 2.5) { // הטיה שמאלה
                     gameManager.moveCarLeft()
                     checkCrashAndUpdateUI()
                     lastSensorMoveTime = currentTime
-                } else if (x < -2.5) {
+                } else if (x < -2.5) { // הטיה ימינה
                     gameManager.moveCarRight()
                     checkCrashAndUpdateUI()
                     lastSensorMoveTime = currentTime
                 }
+            }
+
+            // 2. שליטה במהירות (ציר Y) - התוספת החדשה!
+            val y = event.values[1]
+
+            if (y < 3.5) {
+                // הטיה קדימה (Tilt Forth) -> המכשולים יטוסו מהר! (השהייה של 350 מילישניות)
+                delayMillis = 350L
+            } else if (y > 7.5) {
+                // הטיה אחורה אליך (Tilt Back) -> המשחק יאט (השהייה של 1200 מילישניות)
+                delayMillis = 1200L
+            } else {
+                // מצב אחיזה רגיל ונוח -> מהירות בינונית מאוזנת (השהייה של 750 מילישניות)
+                delayMillis = 750L
             }
         }
     }
